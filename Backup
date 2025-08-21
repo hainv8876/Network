@@ -34,8 +34,8 @@
   +đến 1 thời điểm thì sẽ gom lại thành 1 bản full
 -Forward + Synthetic Full: cũng sẽ có 1 bản full đầu tiên
           +tạo các bản incremental, và gộp luôn bản incremenal đó vào bản full để tạo ra bản full mới nhất
--Active full: cứ bk là bk full
-
+-Active full: cứ bk là bk full, tốn bộ nhớ nhưng restore nhanh
+-Reverse: luu rollback, tốn bộ nhớ, phục hồi nhanh
 
 4.Bottleneck
 Trường hợp server đảm nhiệm tất cả: server quản lý job, scheduler, proxy, nas thì sẽ quá tải overload-> thắt cổ chai
@@ -43,5 +43,7 @@ Dữ liệu sẽ từ client đẩy về server và lưu
 - có thể dữ liệu bk lưu ở bộ nhớ ngoài thì từ client cũng phải đẩy về server(vì proxy nằm ở server-do server đảm nhiệm) sau đó mới đẩy đi tới bộ nhơ sngoài
 
 5.backup proxy là gì:
-Là 1 phần mềm quan trong:nhận lệnh từ server, lấy dữ liệu từ source(client, vmware, hyper-v, máy vật lý),xử lý , nén, gửi sang Repos
+Là 1 phần mềm quan trong:nhận lệnh từ server, lấy dữ liệu từ source(client, vmware, hyper-v, máy vật lý),xử lý , nén, mã hoá, giảm trùng lặp, gửi sang Repos
 -Prõy riêng: giảm tải cho cpu.
+
+
