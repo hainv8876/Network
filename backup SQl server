@@ -1,1 +1,6 @@
 
+1.Full bk: tất cả hàng ngày, giờ
+
+2. Full + differential: tất cả với những cái thay đổi từ lúc full tới thời điểm bk
+
+3.Full + transaction log: tất cả lúc đầu, sau đó là các log transaction với db quan trọng cần point to point recovery.
