@@ -1,0 +1,47 @@
+1. Backup
+*Veeam:
+-Cài trên winserver
+-Tạo repo:
+  +Ổ cứng của server
+  +SAN: cùng mạng: cắm LAN, cấp IP, share folder, phân quyền
+  +NAT: cùng mạng hoặc mạng riêng
+    (Synology, QNAP)
+  +Cloud.
+=> Cần mount vào server để lưu trữ
+  -Lưu ý: Luôn tác Repos ra khỏi server
+    +server: chạy veeam, job, proxy, scheduler
+    +repos: chứa file bk
+    +nếu để cùng server thì: server vừa quản lý các job scheduler vừa đọc ghi dữ liệu
+  -Không dồn hết bk vào 1 repos-> tối ưu tốc độ, an toàn: local repository-ổ cứng trực tiếp cho bk hằng ngày
+  - 1 vùng lưu trữ dài hạn, archive-nén: cloud
+  -Off-site repos: dự phòng
+  -Quy tắc 3-2-1:
+                  3 bản sao lưu: 1 gốc, 2 bk (local+cloud)
+                  2 phương pháp khác nhau:lưu trên nhiều loại thiết bị: nas, cloud  tránh lưu trên cùng 1 thiết bị.
+                  1 off site- ngoài văn phòng, chi nhánh: lưu ở nơi khác khi sảy ra hoả hoạn, thảm hoạ vẫn có thể phục hồi(cloud)
+-Bk VM,Hyper-V
+
+2. Cấu trúc file trong repos:
+-Full bk: chứa đầy đủ: OS + App + data, khi tạo bk mới
+-incremental bk: các block thay đổi so sới point liển trước, khi chạy chế đồ forward incremental
+  +ưu: nhỏ gọn mỗi lần bk, nhưng sẽ phụ thuộc vào nhau.
+-Reverse incremental: chứa các thay đổi để quay về thời điểm trước
+
+3.Có những quy trình nào:
+-forward incremental-phổ biến nhất
+  +đàu tiên tại full
+  +các lần tiếp tạo incremental
+  +đến 1 thời điểm thì sẽ gom lại thành 1 bản full
+-Forward + Synthetic Full: cũng sẽ có 1 bản full đầu tiên
+          +tạo các bản incremental, và gộp luôn bản incremenal đó vào bản full để tạo ra bản full mới nhất
+-Active full: cứ bk là bk full
+
+
+4.Bottleneck
+Trường hợp server đảm nhiệm tất cả: server quản lý job, scheduler, proxy, nas thì sẽ quá tải overload-> thắt cổ chai
+Dữ liệu sẽ từ client đẩy về server và lưu
+- có thể dữ liệu bk lưu ở bộ nhớ ngoài thì từ client cũng phải đẩy về server(vì proxy nằm ở server-do server đảm nhiệm) sau đó mới đẩy đi tới bộ nhơ sngoài
+
+5.backup proxy là gì:
+Là 1 phần mềm quan trong:nhận lệnh từ server, lấy dữ liệu từ source(client, vmware, hyper-v, máy vật lý),xử lý , nén, gửi sang Repos
+-Prõy riêng: giảm tải cho cpu.
