@@ -1,0 +1,5 @@
+-Giám sát hệ thống: ram, cpu
+- PC, VM: cần cài đặt cấu hình zabbix agent
+- thiết bị router, sw: ko cần cài gì mà sẽ giao tiếp qua giao thức SNMP
+-> Thông báo, cảnh báo bất thường hoặc theo cài đặt
+Monitor hệ thống
